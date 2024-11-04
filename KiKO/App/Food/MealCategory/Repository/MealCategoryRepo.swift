@@ -4,6 +4,7 @@
 //
 //  Created by Joscha Amani Gaber on 04.11.24.
 //
+import SwiftData
 import Foundation
 import Combine
 
@@ -20,7 +21,11 @@ class MealCategoryRepo {
     static let shared = MealCategoryRepo()
     
     // MARK: - SwiftData Properties
+    ///
     var mealCategories: [MealCategoryByCoda] = []
+    // MARK: - Error Alert
+    ///
+    var errorForAlert: ErrorForAlert?
     
     // MARK: -- PRIVATE --
     /// ...
@@ -34,7 +39,7 @@ class MealCategoryRepo {
     // MARK: - PRIVATE METHODS -
     /// ...
     
-    // MARK: - GET CategoriesDTO
+    // MARK: - GET MealCategoriesDTO
     /// ...
     private func getCategoriesCoda() {
         print("started fetching meal categories")
@@ -51,14 +56,11 @@ class MealCategoryRepo {
             .map { $0.items }
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    print("Fetching meal categories finished")
-                case .failure:
-                    print(NetworkError.badResponse)
+                if case .failure(let error) = completion {
+                    self.errorForAlert = .init(title: .badResponse, message: error.localizedDescription)
                 }
-            }, receiveValue: { mealCategories in
-                self.mealCategories = mealCategories
+            }, receiveValue: { [unowned self] (mealCategorie) in
+                mealCategories.append(contentsOf: mealCategorie)
             })
             .store(in: &cancellables)
     }
@@ -95,7 +97,8 @@ class MealCategoryRepo {
     /// If Envoirment Keys do not work the App should not work
     private func getEnvoirmentKey(_ key: String) -> String {
         guard let envKey = ProcessInfo.processInfo.environment[key] else {
-            fatalError("Environment variable \(key) not found")
+            print("\(key) could not be found not set")
+            return ""
         }
         return envKey
     }
@@ -107,7 +110,7 @@ class MealCategoryRepo {
     // TODO: ServiceAPI class
     private let envCodaAPIKey = "CODA_API_KEY"
     private let envDocID = "DOC_ID"
-    private let envIngredientCategoryTableID = "INGREDIENTCATEGORY_ID_TABLE"
+    private let envIngredientCategoryTableID = "MEALCATEGORY_ID_TABLE"
     private let envIngredientTableID = "INGREDIENT_ID_TABLE"
     
     // MARK: - AnyCancellable
@@ -115,9 +118,16 @@ class MealCategoryRepo {
     private var cancellables: Set<AnyCancellable> = []
 }
 
+struct ErrorForAlert: Error, Identifiable {
+    let id = UUID()
+    let title: NetworkError
+    var message: NetworkError.RawValue
+}
 
 enum NetworkError: String, Error {
     case badTableID = "Bad Table ID"
     case badResponse = "Bad Response"
     case badStatusCode = "Bad Status Code"
 }
+
+

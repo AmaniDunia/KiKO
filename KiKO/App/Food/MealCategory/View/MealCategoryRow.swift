@@ -13,12 +13,12 @@ struct MealCategoryRow: View {
     
     /// Shadow Properties
     var shadowColor: Color = .primary
-    var shadowRadius: CGFloat = 8
-    var shadowX: CGFloat = 8
-    var shadowY: CGFloat = 8
+    var shadowRadius: CGFloat = 3
+    var shadowX: CGFloat = 3
+    var shadowY: CGFloat = 3
     
     /// @State isSelected
-    @State var isSelected: Bool = true
+    @State var isSelected: Bool = false
     
     var body: some View {
         
@@ -33,7 +33,7 @@ struct MealCategoryRow: View {
                 )
                 .opacity(isSelected ? 1 : 0.1)
             
-            // MARK: - Spacer isSelected
+            // MARK: Spacer isSelected
             if isSelected { Spacer(minLength: 0)}
             
             Text(category.name)
@@ -41,10 +41,10 @@ struct MealCategoryRow: View {
                 .shadow(
                     color: .green.opacity(isSelected ? 1 : 0.1),
                     radius: shadowRadius,
-                    x: shadowX,
+                    x: -shadowX,
                     y: shadowY
                 )
-            // MARK: - Spacer !isSelected
+            // MARK: Spacer !isSelected
             if !isSelected { Spacer(minLength: 0)}
         }
         .font(.title3)
@@ -57,7 +57,7 @@ struct MealCategoryRow: View {
         .clipped()
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
             Button(action: {
-                withAnimation(.smooth(duration: 2, extraBounce: 0.35).delay(0.2)) {
+                withAnimation(.smooth(duration: 0.8, extraBounce: 0.35).delay(0.2)) {
                     isSelected.toggle()
                 }
             }) {
@@ -77,4 +77,5 @@ struct MealCategoryRow: View {
 
 #Preview {
     MealCategoryRow()
+        
 }
