@@ -10,6 +10,7 @@ import SwiftData
 
 @Observable
 class MealCategoryVM {
+    // MARK: - PROPERTIES -
     
     /// **mealCategoryByCoda**
     /// This Array comes from the API
@@ -28,6 +29,7 @@ class MealCategoryVM {
         for codaCategory in categories {
             let category = MealCategory(mealCategory: codaCategory.values)
             modelContext.insert(category)
+            print("Inserted: \(category.name)")
         }
     }
     
@@ -40,5 +42,5 @@ class MealCategoryVM {
     // MARK: - PRIVATE -
     
     /// MealCategory Repository
-    private var repo: MealCategoryRepo
+    private var repo: MealCategoryRepo = .shared
 }

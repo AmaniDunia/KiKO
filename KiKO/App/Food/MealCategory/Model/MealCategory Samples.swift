@@ -8,6 +8,25 @@
 import Foundation
 // MARK: - Samples -
 
+// MARK: - MealCategory
+extension MealCategory {
+    static var example01: MealCategory {
+        MealCategory(
+            id: "MealCategoryValues-01-Breakfast",
+            name: "Gemüse",
+            imageName: "nil",
+            family: "[]"
+        )
+    }
+    static var example02: MealCategory {
+        MealCategory(
+            id: "MealCategoryValues-02-Döner",
+            name: "Obst",
+            imageName: "nil",
+            family: "[]"
+        )
+    }
+}
 // MARK: - MealCategoryDTO
 extension MealCategoryDTO {
     static var example01: Self {

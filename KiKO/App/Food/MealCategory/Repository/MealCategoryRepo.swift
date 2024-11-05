@@ -23,6 +23,7 @@ class MealCategoryRepo {
     // MARK: - SwiftData Properties
     ///
     var mealCategories: [MealCategoryByCoda] = []
+    var categories: [MealCategory] = []
     // MARK: - Error Alert
     ///
     var errorForAlert: ErrorForAlert?
@@ -59,8 +60,8 @@ class MealCategoryRepo {
                 if case .failure(let error) = completion {
                     self.errorForAlert = .init(title: .badResponse, message: error.localizedDescription)
                 }
-            }, receiveValue: { [unowned self] (mealCategorie) in
-                mealCategories.append(contentsOf: mealCategorie)
+            }, receiveValue: { [unowned self] (mealCategory) in
+                mealCategories.append(contentsOf: mealCategory)
             })
             .store(in: &cancellables)
     }

@@ -9,21 +9,31 @@ import SwiftUI
 import SwiftData
 
 struct MealCategoryList: View {
-    @Environment(\.modelContext) var modelContext
-    @Query(sort: \MealCategory.name) var mealCategories: [MealCategory]
-    @State var vm = MealCategoryVM(repo: MealCategoryRepo.shared)
-    var frameHeight: CGFloat = 40
     
+    @State var vm = MealCategoryVM(repo: MealCategoryRepo.shared)
+    var frameHeight: CGFloat = 56
     var body: some View {
         
-        List(vm.mealCategoriesByCoda) { categorie in
+        List(mealCategories) { categorie in
             MealCategoryRow(category: categorie)
                 .frame(height: frameHeight)
         }
         .listStyle(.plain)
+        .navigationBarTitle("Kategorien")
+        
+        if mealCategories.isEmpty {
+            Text("Found \(vm.mealCategoriesByCoda.count) categories")
+            Button("Save All Categories in Swift Data") {
+                vm.updateDataInDatabase(modelContext: modelContext)
+            }
+        }
     }
+    // MARK: - VIEW PROPERTIES
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \MealCategory.name) private var mealCategories: [MealCategory]
 }
 #Preview {
     MealCategoryList()
+        .modelContainer(for: MealCategory.self, inMemory: true)
         .fontDesign(.serif)
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MealCategoryRow: View {
     /// Categorie for the Row
-    var category: MealCategoryByCoda = .example01
+    var category: MealCategory = .example01
     
     /// Shadow Properties
     var shadowColor: Color = .primary
@@ -18,12 +18,12 @@ struct MealCategoryRow: View {
     var shadowY: CGFloat = 3
     
     /// @State isSelected
-    @State var isSelected: Bool = false
+    @State var isSelected: Bool = true
     
     var body: some View {
         
         HStack {
-            // MARK: - CheckMark
+            // MARK: CheckMark
             BTNCheckMark(isSelected: isSelected)
                 .shadow(
                     color: shadowColor.opacity(isSelected ? 1 : 0.8),
@@ -34,8 +34,9 @@ struct MealCategoryRow: View {
                 .opacity(isSelected ? 1 : 0.1)
             
             // MARK: Spacer isSelected
-            if isSelected { Spacer(minLength: 0)}
+            if isSelected { Spacer(minLength: 0) }
             
+            // MARK: TEXT
             Text(category.name)
                 .padding(.trailing, isSelected ? 24 : 8)
                 .shadow(
@@ -44,8 +45,9 @@ struct MealCategoryRow: View {
                     x: -shadowX,
                     y: shadowY
                 )
+            
             // MARK: Spacer !isSelected
-            if !isSelected { Spacer(minLength: 0)}
+            if !isSelected { Spacer(minLength: 0) }
         }
         .font(.title3)
         .bold()
@@ -55,7 +57,9 @@ struct MealCategoryRow: View {
             ADRoundRec(isSelected: $isSelected, color: .secondary.opacity(0.1))
         }
         .clipped()
+        // MARK: swipeActions
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
+            
             Button(action: {
                 withAnimation(.smooth(duration: 0.8, extraBounce: 0.35).delay(0.2)) {
                     isSelected.toggle()
@@ -66,6 +70,7 @@ struct MealCategoryRow: View {
             }
             
         }
+        // MARK: onTapGesture
         .onTapGesture {
             withAnimation {
                 isSelected.toggle()

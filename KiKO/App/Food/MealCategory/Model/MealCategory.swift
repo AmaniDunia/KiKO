@@ -15,17 +15,20 @@ class MealCategory {
     var name: String
     var imageName: String
     var family: String
+    var isSelected: Bool
     
     init(
         id: String = UUID().uuidString,
         name: String,
         imageName: String = "",
-        family: String = ""
+        family: String = "",
+        isSelected: Bool = false
     ) {
         self.id = id
         self.name = name
         self.imageName = imageName
         self.family = family
+        self.isSelected = isSelected
     }
     
     convenience init(mealCategory: MealCategoryDTO) {

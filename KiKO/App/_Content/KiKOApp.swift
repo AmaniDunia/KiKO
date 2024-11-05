@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct KiKOApp: App {
@@ -13,5 +14,6 @@ struct KiKOApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [MealCategory.self])
     }
 }
