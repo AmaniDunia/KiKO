@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BTNCheckMark: View {
-    var isSelected: Bool = false
+    var isSelected: Bool = true
     var body: some View {
         Image(systemName: "checkmark.circle")
             .foregroundStyle(

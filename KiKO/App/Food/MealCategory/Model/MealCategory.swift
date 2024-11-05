@@ -44,6 +44,7 @@ class MealCategory {
 // MARK: - DTO - Data Transfer Object
 
 // MARK: - MealCategoryDTO
+///
 struct MealCategoryDTO: Codable, Identifiable {
     let id: String
     let name: String
@@ -59,14 +60,16 @@ struct MealCategoryDTO: Codable, Identifiable {
     }
 }
 // MARK: - MealCategoryByCoda
-struct MealCategoryByCoda: Codable, Identifiable {
+///
+struct MealCategoryFromCoda: Codable, Identifiable {
     let id: String
     let name: String
     let values: MealCategoryDTO
 }
 // MARK: - MealCategoryApiResponse
+///
 struct MealCategoryApiResponse: Codable {
-    let items: [MealCategoryByCoda]
+    let items: [MealCategoryFromCoda]
 }
 
 

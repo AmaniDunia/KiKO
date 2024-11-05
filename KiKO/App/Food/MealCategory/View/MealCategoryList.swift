@@ -10,17 +10,21 @@ import SwiftData
 
 struct MealCategoryList: View {
     
-    @State var vm = MealCategoryVM(repo: MealCategoryRepo.shared)
+    @State var vm = MealCategoryVM(repo: SharedRepository.shared)
     var frameHeight: CGFloat = 56
     var body: some View {
         
-        List(mealCategories) { categorie in
-            MealCategoryRow(category: categorie)
+        List(mealCategories) { category in
+            MealCategoryRow(category: category)
                 .frame(height: frameHeight)
         }
         .listStyle(.plain)
         .navigationBarTitle("Kategorien")
-        
+        .onAppear {
+            if mealCategories.isEmpty {
+                // TODO: Ask User to safe Data
+            }
+        }
         if mealCategories.isEmpty {
             Text("Found \(vm.mealCategoriesByCoda.count) categories")
             Button("Save All Categories in Swift Data") {

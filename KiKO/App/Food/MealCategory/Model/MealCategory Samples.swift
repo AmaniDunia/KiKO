@@ -47,7 +47,7 @@ extension MealCategoryDTO {
     }
 }
 // MARK: - MealCategoryByCoda
-extension MealCategoryByCoda {
+extension MealCategoryFromCoda {
     static var example01: Self {
         .init(
             id: "MealCategory-01-Breakfast",

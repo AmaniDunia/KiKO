@@ -10,11 +10,10 @@ import SwiftData
 
 @Observable
 class MealCategoryVM {
-    // MARK: - PROPERTIES -
     
     /// **mealCategoryByCoda**
     /// This Array comes from the API
-    var mealCategoriesByCoda: [MealCategoryByCoda] { repo.mealCategories }
+    var mealCategoriesByCoda: [MealCategoryFromCoda] { repo.mealCategories }
 
     /// **errorForAlert**
     /// Displays Errors connected with the API
@@ -22,10 +21,10 @@ class MealCategoryVM {
     
     // MARK: - METHODS -
     
-    // MARK: updateDataInDatabase
+    /// updateDataInDatabase
     @MainActor
     func updateDataInDatabase(modelContext: ModelContext) {
-        let categories: [MealCategoryByCoda] = mealCategoriesByCoda
+        let categories: [MealCategoryFromCoda] = mealCategoriesByCoda
         for codaCategory in categories {
             let category = MealCategory(mealCategory: codaCategory.values)
             modelContext.insert(category)
@@ -33,14 +32,11 @@ class MealCategoryVM {
         }
     }
     
-    // MARK: - INIT -
-    /// Uses Depandecy Injection
-    init(repo: MealCategoryRepo) {
+    /// **NOT NEEDED WITH A SHRED REPO**
+    init(repo: SharedRepository) {
         self.repo = repo
     }
     
-    // MARK: - PRIVATE -
-    
     /// MealCategory Repository
-    private var repo: MealCategoryRepo = .shared
+    private var repo: SharedRepository = .shared
 }

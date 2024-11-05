@@ -14,6 +14,6 @@ struct KiKOApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [MealCategory.self])
+        .modelContainer(for: [MealCategory.self, Ingredient.self])
     }
 }
