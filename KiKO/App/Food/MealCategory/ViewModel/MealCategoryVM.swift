@@ -4,27 +4,42 @@
 //
 //  Created by Joscha Amani Gaber on 04.11.24.
 //
-
+import Combine
 import Foundation
 import SwiftData
 
 @Observable
 class MealCategoryVM {
     
-    /// **mealCategoryByCoda**
-    /// This Array comes from the API
-    var mealCategoriesByCoda: [MealCategoryFromCoda] { repo.mealCategories }
+    var mealCategoriesFromCoda: [MealCategoryFromCoda] { repo.mealCategoriesFromCoda }
+    
+    var mealCategories: [MealCategory] = []
 
     /// **errorForAlert**
     /// Displays Errors connected with the API
     var errorForAlert: ErrorForAlert? { repo.errorForAlert }
     
     // MARK: - METHODS -
+    func saveSelectedCategories(modelContext: ModelContext) {
+        mealCategories.forEach { mealcategory in
+            if mealcategory.isSelected {
+                modelContext.insert(mealcategory)
+            }
+        }
+    }
+    
+    func updateMealCategories() {
+        let mealCategoriesFromCoda: [MealCategoryFromCoda] = mealCategoriesFromCoda
+        for mealCategoryFromCoda in mealCategoriesFromCoda {
+            let mealCategory = MealCategory(mealCategory: mealCategoryFromCoda.values)
+            mealCategories.append(mealCategory)
+        }
+    }
     
     /// updateDataInDatabase
     @MainActor
-    func updateDataInDatabase(modelContext: ModelContext) {
-        let categories: [MealCategoryFromCoda] = mealCategoriesByCoda
+    func saveAllCategoriesInSwiftData(modelContext: ModelContext) {
+        let categories: [MealCategoryFromCoda] = mealCategoriesFromCoda
         for codaCategory in categories {
             let category = MealCategory(mealCategory: codaCategory.values)
             modelContext.insert(category)
@@ -33,10 +48,11 @@ class MealCategoryVM {
     }
     
     /// **NOT NEEDED WITH A SHRED REPO**
-    init(repo: SharedRepository) {
-        self.repo = repo
-    }
     
     /// MealCategory Repository
     private var repo: SharedRepository = .shared
+    
+    /// **mealCategoryByCoda**
+    /// This Array comes from the API
+    
 }

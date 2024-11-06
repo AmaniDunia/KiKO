@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MealCategoryRow: View {
     /// Categorie for the Row
-    var category: MealCategory = .example01
+    @Binding var category: MealCategory
     
     /// Shadow Properties
     var shadowColor: Color = .primary
@@ -18,43 +18,42 @@ struct MealCategoryRow: View {
     var shadowY: CGFloat = 3
     
     /// @State isSelected
-    @State var isSelected: Bool = true
     
     var body: some View {
         
         HStack {
             // MARK: CheckMark
-            BTNCheckMark(isSelected: isSelected)
+            BTNCheckMark(isSelected: category.isSelected)
                 .shadow(
-                    color: shadowColor.opacity(isSelected ? 1 : 0.8),
-                    radius: isSelected ? shadowRadius : shadowRadius * 0.8,
-                    x: isSelected ? shadowX : shadowX * 0.8,
-                    y: isSelected ? shadowY : shadowY * 0.8
+                    color: shadowColor.opacity(category.isSelected ? 1 : 0.8),
+                    radius: category.isSelected ? shadowRadius : shadowRadius * 0.8,
+                    x: category.isSelected ? shadowX : shadowX * 0.8,
+                    y: category.isSelected ? shadowY : shadowY * 0.8
                 )
-                .opacity(isSelected ? 1 : 0.1)
+                .opacity(category.isSelected ? 1 : 0.1)
             
             // MARK: Spacer isSelected
-            if isSelected { Spacer(minLength: 0) }
+            if category.isSelected { Spacer(minLength: 0) }
             
             // MARK: TEXT
             Text(category.name)
-                .padding(.trailing, isSelected ? 24 : 8)
+                .padding(.trailing, category.isSelected ? 24 : 8)
                 .shadow(
-                    color: .green.opacity(isSelected ? 1 : 0.1),
+                    color: .green.opacity(category.isSelected ? 1 : 0.1),
                     radius: shadowRadius,
                     x: -shadowX,
                     y: shadowY
                 )
             
             // MARK: Spacer !isSelected
-            if !isSelected { Spacer(minLength: 0) }
+            if !category.isSelected { Spacer(minLength: 0) }
         }
         .font(.title3)
         .bold()
-        .padding(isSelected ? 8 : 0)
+        .padding(category.isSelected ? 8 : 0)
         .padding(.horizontal, 16)
         .background {
-            ADRoundRec(isSelected: $isSelected, color: .secondary.opacity(0.1))
+            ADRoundRec(isSelected: $category.isSelected, color: .secondary.opacity(0.1))
         }
         .clipped()
         // MARK: swipeActions
@@ -62,18 +61,18 @@ struct MealCategoryRow: View {
             
             Button(action: {
                 withAnimation(.smooth(duration: 0.8, extraBounce: 0.35).delay(0.2)) {
-                    isSelected.toggle()
+                    category.isSelected.toggle()
                 }
             }) {
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "checkmark.circle")
-                    .tint(isSelected ? .gray : .green)
+                Image(systemName: category.isSelected ? "checkmark.circle.fill" : "checkmark.circle")
+                    .tint(category.isSelected ? .gray : .green)
             }
             
         }
         // MARK: onTapGesture
         .onTapGesture {
             withAnimation {
-                isSelected.toggle()
+                category.isSelected.toggle()
             }
         }
     }
@@ -81,6 +80,6 @@ struct MealCategoryRow: View {
 }
 
 #Preview {
-    MealCategoryRow()
+    MealCategoryRow(category: .constant(.example01))
         
 }

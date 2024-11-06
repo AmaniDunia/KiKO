@@ -9,32 +9,37 @@ import SwiftUI
 import SwiftData
 
 struct MealCategoryList: View {
-    
-    @State var vm = MealCategoryVM(repo: SharedRepository.shared)
     var frameHeight: CGFloat = 56
     var body: some View {
         
-        List(mealCategories) { category in
-            MealCategoryRow(category: category)
-                .frame(height: frameHeight)
-        }
-        .listStyle(.plain)
-        .navigationBarTitle("Kategorien")
-        .onAppear {
-            if mealCategories.isEmpty {
-                // TODO: Ask User to safe Data
-            }
-        }
         if mealCategories.isEmpty {
-            Text("Found \(vm.mealCategoriesByCoda.count) categories")
-            Button("Save All Categories in Swift Data") {
-                vm.updateDataInDatabase(modelContext: modelContext)
+            List($vm.mealCategories) { $category in
+                MealCategoryRow(category: $category)
+                    .frame(height: frameHeight)
+            }
+            .listStyle(.plain)
+        } else {
+            List(mealCategories) { category in
+                Text(category.name)
+            }
+            .navigationBarTitle("Kategorien")
+        }
+        
+        if mealCategories.isEmpty {
+            Text("Found \(vm.mealCategoriesFromCoda.count) categories")
+            Button("Update All Categories") {
+                vm.updateMealCategories()
+            }
+            Button("Save Selected Categories in Swift Data") {
+                vm.saveSelectedCategories(modelContext: modelContext)
             }
         }
     }
     // MARK: - VIEW PROPERTIES
+    @State private var vm = MealCategoryVM()
+    
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \MealCategory.name) private var mealCategories: [MealCategory]
+    @Query(sort: \MealCategory.name) var mealCategories: [MealCategory]
 }
 #Preview {
     MealCategoryList()
