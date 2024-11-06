@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct IngredientList: View {
+    @Binding var ingredientsSelected: [Ingredient]
     var body: some View {
         ScrollView {
             VStack {
@@ -21,6 +22,9 @@ struct IngredientList: View {
         }
         .navigationTitle("Zutaten")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            vm.getIngredients()
+        }
         .toolbar {
             if vm.ingredients.isEmpty {
                 ToolbarItem(placement: .topBarLeading) {
@@ -44,6 +48,6 @@ struct IngredientList: View {
 
 #Preview {
     NavigationStack {
-        IngredientList()
+        IngredientList(ingredientsSelected: .constant([]))
     }
 }
