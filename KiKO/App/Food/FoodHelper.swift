@@ -7,6 +7,25 @@
 
 import Foundation
 
+enum Meal: String, Codable, CaseIterable, Identifiable {
+    var id: Self { self }
+    
+    case breakfast
+    case lunch
+    case dinner
+    case snack
+    case dessert
+    
+    var titel: String {
+        switch self {
+        case .breakfast: "Frühstück"
+        case .lunch:     "Mittagessen"
+        case .dinner:    "Abendbrot"
+        case .snack:     "Snack"
+        case .dessert:   "Dessert"
+        }
+    }
+}
 
 /// **Season enum**
 ///
