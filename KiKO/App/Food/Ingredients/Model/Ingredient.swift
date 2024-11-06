@@ -20,6 +20,8 @@ class Ingredient {
     var season: Season.RawValue
     var category: MealCategory?
     var family: String
+    var unit: UnitForSize?
+    var size: String
     var isLiked: Bool
     var isDisliked: Bool
     var isSelectedForAction: Bool
@@ -34,6 +36,8 @@ class Ingredient {
         season: Season.RawValue,
         category: MealCategory? = nil,
         family: String,
+        unit: UnitForSize? = nil,
+        size: String = "",
         isLiked: Bool = false,
         isDisliked: Bool = false,
         isSelectedForAction: Bool = false,
@@ -47,6 +51,8 @@ class Ingredient {
         self.season = season
         self.category = category
         self.family = family
+        self.unit = unit
+        self.size = size
         self.isLiked = isLiked
         self.isDisliked = isDisliked
         self.isSelectedForAction = isSelectedForAction

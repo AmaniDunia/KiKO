@@ -9,78 +9,41 @@ import SwiftUI
 import SwiftData
 
 struct IngredientList: View {
-    private var vm = IngredientVM()
     var body: some View {
-        VStack {
-            List(vm.ingredients) { ingredient in
-                IngredientRow(ingredient: ingredient)
-                // MARK: - onTap
-                    .onTapGesture {
-                        withAnimation(
-                            .smooth(
-                                duration: 0.4,
-                                extraBounce: 0.25
-                            )) {
-                                ingredient.isSelectedForAction.toggle()
-                            }
-                    }
-                    .onTapGesture(count: 2) {
-                        withAnimation(
-                            .smooth(
-                                duration: 0.4,
-                                extraBounce: 0.25
-                            )) {
-                                ingredient.isLiked.toggle()
-                            }
-                    }
-                // MARK: - leading
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button {
-                            ingredient.isLiked.toggle()
-                        } label: {
-                            Image(systemName: ingredient.isLiked ? "heart.fill" : "heart")
-                                .tint(ingredient.isLiked ? .gray : .red)
-                        }
-                    }
-                // MARK: - trailing
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button {
-                            withAnimation(.smooth(duration: 0.8, extraBounce: 0.3)) {
-                                ingredient.isSelectedForAction.toggle()
-                            }
-                        } label: {
-                            Image(systemName: ingredient.isSelectedForAction ? "heart.circle.fill" : "heart.circle")
-                                .tint(ingredient.isLiked ? .gray : .green)
-                        }
-                    }
-                
+        ScrollView {
+            VStack {
+                ForEach(vm.ingredients) { ingredient in
+                    IngredientRow(ingredient: ingredient)
+                }
+                .listStyle(.plain)
             }
-            .listStyle(.plain)
-            
-            Button("Save Selcted Ingredients") {
-                vm.makeListFromSelectedIngredients()
-            }
-            .padding()
-            
-            Button("Update List") {
-                vm.getIngredients()
-            }
-            .padding()
+            .transition(.slide.combined(with: .opacity.combined(with: .scale(0.1))))
         }
-        .overlay {
-            if !vm.selectedIngredientsForAction.isEmpty {
-                List(vm.selectedIngredientsForAction) { ingredient in
-                    VStack {
-                        IngredientRow(ingredient: ingredient)
-                        
-                        
+        .navigationTitle("Zutaten")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if vm.ingredients.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Laden") {
+                        withAnimation(.smooth(duration: 1.8, extraBounce: 0.35)) {
+                            vm.getIngredients()
+                        }
                     }
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Speichern") {
+                    vm.makeListFromSelectedIngredients()
                 }
             }
         }
     }
+    
+    @Bindable private var vm = IngredientVM()
 }
 
 #Preview {
-    IngredientList()
+    NavigationStack {
+        IngredientList()
+    }
 }

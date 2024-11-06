@@ -27,7 +27,11 @@ class IngredientVM {
     ///
     func getIngredients() {
         repo.getIngredients()
-        ingredients = repo.ingredients
+        for ingredient in repo.ingredients {
+            if !ingredients.contains(ingredient) {
+                ingredients = repo.ingredients
+            }
+        }
     }
     
     /// **selectIngredient**
@@ -40,7 +44,11 @@ class IngredientVM {
     func makeListFromSelectedIngredients() {
         for ingredient in ingredients {
             if ingredient.isSelectedForAction {
-                selectedIngredientsForAction.append(ingredient)
+                if !selectedIngredientsForAction.contains(ingredient) {
+                    selectedIngredientsForAction.append(ingredient)
+                } else {
+                    print("Ingredient already in list")
+                }
             }
         }
     }
